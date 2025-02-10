@@ -1,4 +1,4 @@
-# SharePoint Framework Client-Side Web Part Samples & Tutorial Materials
+# SharePoint  Client-Side Web Part Samples & Tutorial Materials
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/pnp/sp-dev-fx-webparts?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/pnp/sp-dev-fx-webparts?style=social)
