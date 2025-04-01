@@ -2,22 +2,11 @@ import * as React from "react";
 import styles from "./ModernCharts.module.scss";
 import { IModernChartsProps } from "../IModernChartsWebPartProps";
 import { MChart } from "../IModernChartsWebPartProps";
-import "chart.js";
-import { Doughnut } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
-import { Pie } from "react-chartjs-2";
-import { Bar } from "react-chartjs-2";
-import { HorizontalBar } from "react-chartjs-2";
-import { Radar } from "react-chartjs-2";
-import { Polar } from "react-chartjs-2";
+
+import { Bar, Doughnut, Line, Pie, PolarArea, Radar } from "react-chartjs-2";
+
 import ChartOptions from "../ChartOptions";
-import {
-  DocumentCard,
-  DocumentCardTitle,
-  DocumentCardLocation,
-  DocumentCardPreview,
-  IDocumentCardPreviewProps,
-} from "office-ui-fabric-react/lib/DocumentCard";
+import { DocumentCard, DocumentCardLocation, DocumentCardTitle } from "@fluentui/react";
 
 export default class ModernCharts extends React.Component<
   IModernChartsProps,
@@ -59,14 +48,14 @@ export default class ModernCharts extends React.Component<
   }
 
   public chart(data: Object, options: Object, type: string) {
-    var tChart: any;
+    let tChart: any;
     switch (type) {
       case "doughnut":
         tChart = <Doughnut data={data} options={options} />;
         return tChart;
       case "line":
         return (
-          <Line data={data} options={options} legend={{ display: false }} />
+          <Line data={data as any} options={options} legend={{ display: false }} />
         );
       case "pie":
         tChart = <Pie data={data} options={options} />;
@@ -78,23 +67,25 @@ export default class ModernCharts extends React.Component<
         return tChart;
       case "horizontalbar":
         tChart = (
-          <HorizontalBar
-            data={data}
+          <Bar
+          
+            data={data as any}
             options={options}
+          
             legend={{ display: false }}
           />
         );
         return tChart;
       case "radar":
         tChart = (
-          <Radar data={data} options={options} legend={{ display: false }} />
+          <Radar data={data as any} options={options} legend={{ display: false }} />
         );
         return tChart;
       case "polar":
-        tChart = <Polar data={data} options={options} />;
+        tChart = <PolarArea data={data as any} options={options} />;
         return tChart;
       default:
-        tChart = <Line data={data} options={options} />;
+        tChart = <Line data={data as any} options={options} />;
         return tChart;
     }
   }

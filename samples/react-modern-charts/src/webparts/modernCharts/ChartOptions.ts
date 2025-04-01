@@ -4,15 +4,50 @@ export interface Theme {
     hoverColors: Array<string>;
 }
 
-import * as cs from 'color-scheme/lib/color-scheme';
+
 import { MChart } from './IModernChartsWebPartProps';
+
+
+
+export interface ITheme {
+    bgColors:string[],
+    hoverColors:string[]
+}
+export interface IChartData {
+    labels:string[],
+        datasets: Array<{
+            data: number[],
+            backgroundColor: string[],
+            hoverBackgroundColor: string[]
+        }>
+}
+
+export interface IChartOptions {
+    legend?: {
+        display: boolean;
+        layout: {
+            padding: number;
+        };
+        position: string;
+        labels?: {
+            fontColor: string;
+        };
+        scales?: {
+            yAxes?: Array<{
+                ticks: {
+                    beginAtZero: boolean;
+                };
+            }>;
+        };
+    }
+}
 
 export default class ChartOptions {
 
     public static _sampleData: Array<number> = [100, 50, 275, 100];
     public static _sampleCols: Array<string> = ['UPS','FedEx','USPS','OnTrac'];
 
-    public static Options(): Object{
+    public static Options(): IChartOptions{
         return {
             legend: {
                 display: true,
@@ -45,8 +80,8 @@ export default class ChartOptions {
         };
     }
 
-    public static RandomColors(): Object {
-        var colors = {bgColors: [], hoverColors: []};
+    public static RandomColors(): ITheme {
+        const colors: ITheme= {bgColors: [], hoverColors: []};
         var colorTheme = new cs;
         var colorHue = Math.floor(Math.random() * 360);
         var colorPalette = colorTheme.from_hue(colorHue).scheme('analogic').variation('default');
@@ -68,13 +103,14 @@ export default class ChartOptions {
             ],
             datasets: [{
             data: [100, 50, 275, 100],
-            backgroundColor: theme['bgColors'],
-            hoverBackgroundColor: theme['hoverColors']
+            backgroundColor: theme.bgColors,
+            hoverBackgroundColor: theme.hoverColors
             }]
         };
     }
 
-    public static shuffleArray(array){
+    public static shuffleArray(array:string[]): string[] {
+        // Fisher-Yates (aka Knuth) Shuffle
         var currentIndex = array.length, temporaryValue, randomIndex ;
         while (0 !== currentIndex) {
             randomIndex = Math.floor(Math.random() * currentIndex);

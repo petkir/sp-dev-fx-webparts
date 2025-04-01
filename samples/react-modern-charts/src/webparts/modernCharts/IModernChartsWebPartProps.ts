@@ -1,4 +1,4 @@
-export interface ChartConfiguration {
+export interface IChartConfiguration {
   title: string;
   description: string;
   other: boolean;
@@ -8,7 +8,7 @@ export interface ChartConfiguration {
   type: string;
   url: string;
   dataurl: string;
-  list: string;
+  list?: string;
   col1: string;
   col2: string;
   act: string;
@@ -26,7 +26,7 @@ export interface ChartConfiguration {
 export interface IModernChartsWebPartProps {
   description: string;
   numCharts: number;
-  chartConfig: Array<ChartConfiguration>;
+  chartConfig: Array<IChartConfiguration>;
   state: boolean;
   firstLoad: boolean;
   siteOptions: Array<any>;

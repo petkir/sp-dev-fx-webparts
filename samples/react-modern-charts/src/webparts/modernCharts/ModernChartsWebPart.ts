@@ -1,7 +1,11 @@
+
+// eslint- disable file @typescript-eslint/no-explicit-any
+// eslint-disable @typescript-eslint/no-unused-vars
+
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
-import { BaseClientSideWebPart, IWebPartContext } from "@microsoft/sp-webpart-base";
+import { BaseClientSideWebPart, IWebPartContext, WebPartContext } from "@microsoft/sp-webpart-base";
 import {
   IPropertyPaneConfiguration,
   PropertyPaneButton,
@@ -10,17 +14,15 @@ import {
   PropertyPaneSlider,
   PropertyPaneTextField
 } from "@microsoft/sp-property-pane";
+import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import * as strings from 'modernChartsStrings';
 import ModernCharts from './components/ModernCharts';
-import { IModernChartsProps } from './IModernChartsWebPartProps';
+import { IChartConfiguration, IModernChartsProps } from './IModernChartsWebPartProps';
 import { MChart } from './IModernChartsWebPartProps';
 import { IModernChartsWebPartProps } from './IModernChartsWebPartProps';
 import { ChartConfiguration } from './IModernChartsWebPartProps';
 import ChartOptions from './ChartOptions';
-import {
-  SPHttpClient,
-  SPHttpClientResponse
-} from '@microsoft/sp-http';
+
 
 export interface ISPLists {
   value: ISPList[];
@@ -30,6 +32,8 @@ export interface ISPList {
   Title: string;
   Id: string;
 }
+
+
 
 export interface IFieldProperty extends IPropertyPaneDropdownOption {
   fieldtype: string;
@@ -72,30 +76,19 @@ export default class ModernChartsWebPart extends BaseClientSideWebPart<IModernCh
     { key: 'sum', text: 'Sum' }
   ];
 
-  public constructor(context: IWebPartContext) {
+  public constructor(context: WebPartContext) {
     super();
   }
   private ChartThemes: ChartOptions;
 
-  private defaultOptions: Object = {
-    legend: {
-      display: false,
-      layout: {
-        padding: 10
-      },
-      position: 'bottom',
-      labels: {
-        fontColor: 'rgba(100, 100, 100, 1.0)'
-      }
-    }
-  };
+  
 
-  public defaultChartConfig(chartDesc: string): ChartConfiguration {
-    var defConfig = {
+  public defaultChartConfig(chartDesc: string): IChartConfiguration {
+    const defConfig = {
       title: 'Chart Title',
       description: chartDesc,
       type: 'doughnut',
-      list: null,
+      list: undefined,
       dataurl: this.context.pageContext.web.absoluteUrl,
       url: this.context.pageContext.web.absoluteUrl,
       other: true,
@@ -111,8 +104,8 @@ export default class ModernChartsWebPart extends BaseClientSideWebPart<IModernCh
       columns: [],
       lists: this.properties.listOptions,
       theme: "Random",
-      bgColors: ChartOptions.RandomColors()['bgColors'],
-      hoverColors: ChartOptions.RandomColors()['bgColors']
+      bgColors: ChartOptions.RandomColors().bgColors,
+      hoverColors: ChartOptions.RandomColors().hoverColors
     };
 
     return defConfig;
@@ -125,7 +118,7 @@ export default class ModernChartsWebPart extends BaseClientSideWebPart<IModernCh
       this.properties.firstLoad = true;
       this.properties.numCharts = 1;
       this.properties.chartConfig = [];
-      const firstChartConfig = this.defaultChartConfig;
+      
       this.properties.chartConfig.push(this.defaultChartConfig('Demo Chart, Edit Web Part to Customize'));
     }
     this.getChartData();
@@ -137,14 +130,20 @@ export default class ModernChartsWebPart extends BaseClientSideWebPart<IModernCh
 
   private getChartData(): void {
     const _chartData: Array<MChart> = [];
-    var _count = 0;
+    let _count = 0;
     this.properties.chartConfig.forEach((cfg, i) => {
-      if (cfg.list != null) {
+      if (cfg.list !== null) {
         this.getData(cfg).then((response) => {
           const chart = this.calculateData(response.value, cfg);
           const _chart: MChart = { data: chart['data'], labels: chart['labels'], config: cfg, key: i };
           _chartData[i] = _chart;
           if (++_count == this.properties.chartConfig.length) { this.getCharts(_chartData); }
+        }).catch((err) => {
+          this.context.statusRenderer.clearLoadingIndicator(this.domElement);
+          this.context.statusRenderer.renderError(this.domElement, "There was an error loading your list, please verify the selected list has Calendar Events or choose a new list.");
+          this.properties.state = false;
+          this.context.propertyPane.refresh();
+          this.render();
         });
       } else {
         const _chart: MChart = { data: ChartOptions._sampleData, labels: ChartOptions._sampleCols, config: cfg, key: i };
