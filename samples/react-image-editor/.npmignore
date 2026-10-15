@@ -1,7 +1,7 @@
 !dist
 config
 
-gulpfile.js
+eslint.config.js
 
 release
 src

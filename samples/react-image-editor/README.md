@@ -46,8 +46,8 @@ The Placeholder and FilePicker are components from the [sp-dev-fx-controls-react
 | Every SPFx version is only compatible with specific version(s) of Node.js. In order to be able to build this sample, please ensure that the version of Node on your workstation matches one of the versions listed in this section. This sample will not work on a different version of Node.|
 |Refer to <https://aka.ms/spfx-matrix> for more information on SPFx compatibility.   |
 
-![SPFx 1.21.1](https://img.shields.io/badge/SPFx-1.21.1-green.svg)
-![Node.js LTS 22](https://img.shields.io/badge/Node.js-LTS%2022-green.svg)
+![SPFx 1.24.0-rc.0](https://img.shields.io/badge/SPFx-1.24.0--rc.0-orange.svg)
+![Node.js 22, 24, or 26](https://img.shields.io/badge/Node.js-22%20%7C%2024%20%7C%2026-green.svg)
 ![Compatible with SharePoint Online](https://img.shields.io/badge/SharePoint%20Online-Compatible-green.svg)
 ![Does not work with SharePoint 2019](https://img.shields.io/badge/SharePoint%20Server%202019-Incompatible-red.svg "SharePoint Server 2019 requires SPFx 1.4.1 or lower")
 ![Does not work with SharePoint 2016 (Feature Pack 2)](https://img.shields.io/badge/SharePoint%20Server%202016%20(Feature%20Pack%202)-Incompatible-red.svg "SharePoint Server 2016 Feature Pack 2 requires SPFx 1.1")
@@ -66,6 +66,14 @@ The Placeholder and FilePicker are components from the [sp-dev-fx-controls-react
 
 > SharePoint Online
 
+- Node.js 22.14.0+ (22.x), 24.x, or 26.x. The included `.nvmrc` selects Node.js 22.14.0.
+- Use npm 10 for a reproducible install. Validation used Node.js 22.23.3 and npm 10.9.9;
+  npm 12.2.0 rejects the React overrides during `npm ci`.
+- This sample targets the SPFx 1.24.0-rc.0 prerelease and React 18.3.1.
+
+The npm overrides keep React, React DOM, and their typings on the same versions
+throughout the dependency tree, including the PnP controls that still declare React 17.
+
 ## Contributors
 
 - [Peter Paul Kirschner](https://github.com/petkir)
@@ -75,6 +83,7 @@ The Placeholder and FilePicker are components from the [sp-dev-fx-controls-react
 
 |Version|Date|Comments|
 |-------|----|--------|
+|2.0.2.0|Oct 15, 2026|Upgraded to SPFx 1.24.0-rc.0, React 18.3.1, and the Heft build toolchain|
 |2.0.1.0|Mai 5, 2025| SPFx 1.21.1|
 |2.0.1.0|Apr 27, 2025|Node Version SPFx 1.21|
 |2.0.0.0|Apr 02, 2025|Added properties and accessibility|
@@ -87,8 +96,14 @@ The Placeholder and FilePicker are components from the [sp-dev-fx-controls-react
 - Ensure that you are at the solution folder
 - in the command-line run:
   - `npm install`
-  - edit `config\serve.json` set `"initialPage": "https://{tenant}.sharepoint.com/_layouts/15/workbench.aspx"`
-  - `gulp serve`
+  - `npx heft trust-dev-cert` (once per development environment)
+  - edit `config/serve.json` set `"initialPage": "https://{tenant}.sharepoint.com/_layouts/15/workbench.aspx"`
+  - `npm start`
+
+The sample uses Heft instead of Gulp. Run `npm test` to validate the development build,
+`npm run build` (or `npm run ship`) to build and package for production, and
+`npm run clean` to remove build outputs. The deployable package is generated at
+`sharepoint/solution/react-image-editor.sppkg`.
 
 > This sample can also be opened with [VS Code Remote Development](https://code.visualstudio.com/docs/remote/remote-overview). Visit <https://aka.ms/spfx-devcontainer> for further instructions.
 

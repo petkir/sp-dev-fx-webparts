@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-case-declarations */
 import { DisplayMode } from '@microsoft/sp-core-library';
 import { clone } from '@microsoft/sp-lodash-subset';
 import {

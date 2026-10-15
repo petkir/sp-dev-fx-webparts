@@ -19,7 +19,7 @@
       "* Histoy of Actions"
     ],
     "creationDateTime": "2021-03-17",
-    "updateDateTime": "2025-04-02",
+    "updateDateTime": "2026-10-15",
     "products": [
       "SharePoint"
     ],
@@ -34,7 +34,7 @@
       },
       {
         "key": "SPFX-VERSION",
-        "value": "1.21.1"
+        "value": "1.24.0-rc.0"
       },
       {
         "key": "SPFX-TEAMSTAB",
